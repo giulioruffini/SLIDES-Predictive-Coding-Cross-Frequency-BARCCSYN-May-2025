@@ -1,0 +1,605 @@
+\documentclass[aspectratio=169]{beamer}
+% The values that it accepts are: 1610, 169, 149, 54, 43 and 32, which stand for the ratios 16:10, 16:9, 14:9, 5:4, 4:3 and 3:2, respectively.
+
+\newcommand{\R}{\mathbb{R}}
+\usepackage{xspace}
+\newcommand{\SEP}{$\mathcal S$\xspace}
+\newcommand{\K}{$\mathcal K$\xspace}
+\newcommand{\Ko}{\mathcal K}
+\usepackage{silence}
+\usepackage{multicol}
+\WarningsOff[everypage]
+
+\include{varia/preamble}
+\date{}
+\title{Cross-Frequency Coupling for Prediction
+Error Evaluation: A laNMM Modeling Approach}
+%\subtitle[]{}
+
+\author[Ruffini et al.]{Giulio Ruffini, Edmundo Lopez-Sola, Raul Palma, Roser Sanchez-Todo,
+Jakub Vohryzek, Francesca Castaldo, and Karl Friston
+}
+\institute[Neuroelectrics]
+{
+	Neuroelectrics Barcelona, Barcelona \\
+ Universitat Pompeu Fabra (UPF), University College London \\
+ (BARCCSYN 2025, May 23, 2025) \\
+	\medskip
+	\emph{giulio.ruffini@neuroelectrics.com}
+}
+
+\begin{document}
+
+
+
+\sloppy
+
+%% =========
+%% page titre
+%% =========
+
+%% uncomment for cool titlepage
+% \include{0_pagetitre}
+
+%% comment for cool titlepage
+
+\begin{frame}[label=titre, plain]
+ \titlepage
+ \begin{center}%\includegraphics[height=1.2cm]{COPL}%
+  %\hspace{2cm}
+  \includegraphics[height=1.cm]{img/Neuroelectrics_logo.png}\end{center}
+%   \includegraphics[height=2cm]{img/UL_actu.pdf}\end{center}
+\end{frame}
+
+%% =========
+%% TOC
+%% =========
+
+
+%% =========
+%% Contenu
+%% =========
+
+% \include{1_introduction} 
+% \include{2_AIT}
+% %\include{3_hypothesis}
+% %\include{4_agent}
+% \include{5_criticality}
+% \include{6_neurophenomenology}
+% \include{7_closing}     
+
+
+% \begin{frame}
+%   \titlepage
+% \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction: Predictive Coding \& LaNMM}
+
+%%%%%%%%%%%
+\begin{frame}[label=ladila]{The algorithmic agent\cite{ruffini_algorithmic_2024}}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+
+     \begin{itemize}
+     \item A model for natural and artificial agenthood inspired in Algorithmic Information Theory\cite{Ruffini2017,ruffini_algorithmic_2024}.
+    \item 
+        Minimal set of elements needed for an interacting homeostatic algorithmic system. 
+        \item 
+        To be connected with (neuro)biology!
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[height=7cm]{figures/Figure1_KT_agent.png}
+    \end{column}
+\end{columns}
+\end{frame}
+%%%%%%%%%%%
+
+%%%%%%%%%%%
+\begin{frame}[label=ladila]{The algorithmic agent\cite{ruffini_algorithmic_2024}}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+     \begin{itemize}
+     \item Here we focus on The \textbf{Comparator}: which compares data with predictions \cite{Ruffini2017}.
+        \item How? Through oscillatory computation! Ok, but
+        \item Where is the information in the brain?
+        \item How is it ``compared"?
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[height=5cm]{figures/presentation/Fig_KT_2.png}
+    \end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%
+
+
+%%%%%%%%%%%%
+\begin{frame}{Motivation}
+  \begin{itemize}
+    \item Neural implementation of predictive coding’s comparator is unresolved: \textbf{how are mismatches (prediction errors) computed in cortical circuits?}
+    \item A \textbf{Comparator} must subtract predictions ($P$) from inputs ($I$) and weight the difference by \textit{precision} (confidence) for belief updating. \item \textbf{Open question:} How do neural networks perform this subtraction ($I - P$) and dynamic gain control (precision weighting) in real time?
+    \item \textbf{Hypothesis:} Oscillatory cross-frequency coupling provides the mechanism. By leveraging interactions of slow and fast brain waves, the cortex could evaluate prediction errors and encode their precision.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%
+
+%%%%%%%%%%%
+\begin{frame}{Predictive Coding Framework}
+  \begin{itemize}
+    \item Brain as a modeling,  \textbf{predictive} \textbf{agent}: continuously generating ``top-down'' predictions and comparing them with ``bottom-up sensory'' input (hierarchically, prediction errors).
+    \item \textbf{Prediction errors propagate forward }to update higher-level beliefs; predictions \textbf{feed back} to explain away expected input.
+    \item Neural oscillations play distinct roles: \textbf{fast} gamma ($\sim$30--100 Hz) activity conveys feedforward surprise (prediction errors), while \textbf{slower} alpha/beta (8--30 Hz) rhythms carry feedback predictions.
+    \item \textbf{Cross-frequency coupling (CFC)} links these scales: slower oscillations modulate fast oscillation amplitude, coordinating hierarchical inference (precision-weighted error signaling). But, precisely, \textbf{how}?
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%
+\begin{frame}{How does this compute (Oscillatory Neural Networks)?}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//presentation/ONN.png}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%
+\begin{frame}{ONN Context (Todri-Sanial et al., 2024 \cite{todri-sanialComputingOscillatorsTheoretical2024})}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures//presentation/ONNs_overview.png}
+    \label{fig:enter-label}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%
+\begin{frame}{Implementation: the LaNMM model}
+\begin{itemize}
+    \item In 2017, we wanted to build a computational model for AD
+    \item Need: capture two oscillatory features: slowing of EEG, gamma deficit\cite{netoEEGSpectralFeatures2015a,casulaDecreasedFrontalGamma2022}. Similar to PD \cite{ruffiniAlgorithmicComplexityEEG2018}.
+\end{itemize}
+
+    \begin{figure}
+        \centering
+            \includegraphics[width=0.9\linewidth]{figures//presentation/ADPDspectra.png}
+    \end{figure}
+\end{frame}
+%%%%%%%%%%
+% \begin{frame}{LaNMM Architecture (Bastos et al., 2012/2018, Ruffini2018, Sanchez-Todo2023)\cite{ruffiniBiologicallyRealisticLaminar, sanchez-todo_physical_2023,bastosCanonicalMicrocircuitsPredictive2012,
+% bastos_laminar_2018}}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.75\linewidth]{figures//presentation/bastos_sanchez_collage1.png}
+% \end{figure}
+%  \end{frame}
+% %%%%%%%%%%
+
+ 
+%%%%%%%%%%
+\begin{frame}{LaNMM Architecture \cite{sanchez-todo_physical_2023}}
+{\footnotesize
+  \begin{columns}
+      \begin{column}{0.3\textwidth}
+      \begin{itemize} 
+        \item Biophysical model of a cortical column with laminar (superficial/deep) structure.
+        \item Integrates alpha (slow) and gamma (fast) oscillatory subnetworks.
+        \item Merges Jansen-Rit (alpha) and PING (gamma) models.
+        \item Includes deep/superficial pyramidal cells (P1/P2), inhibitory interneurons (PV), and excitatory stellate inputs.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.7\textwidth}
+      \centering
+      \includegraphics[width=1\linewidth]{figures/presentation/bastos_sanchez_collage1.png}
+    \end{column}
+  \end{columns}
+  }
+\end{frame}
+%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%
+% \begin{frame}{Model Dynamics and CFC}
+%   \begin{itemize}
+%     \item LaNMM autonomously generates concurrent $\alpha$ ($\sim$10 Hz) and $\gamma$ ($\sim$40 Hz) oscillations (no external noise drive required).
+%     \item Intrinsic cross-frequency coupling emerges: slow-wave phase modulates fast-wave amplitude (phase-amplitude coupling), and slow oscillation envelopes modulate fast oscillation envelopes (envelope-envelope coupling).
+%     \item Reproduces laminar oscillatory patterns observed in cortex: deep-layer alpha/beta rhythms modulate superficial-layer gamma activity.
+%     \item Flexible framework: by tuning parameters, the slow–fast frequency pair can be shifted (e.g. theta–gamma, beta–gamma), modeling diverse cortical rhythms.
+%   \end{itemize}
+% \end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{LaNMM Architecture (Dynamical landscape) (de Palma et al., 2025\cite{dePalmaEmergenceMultifrequencyLaNMM})}
+  \centering 
+  \begin{figure}
+      \centering
+      \includegraphics[width=0.8\linewidth]{figures/Figure2.png}
+      \label{fig:lanmm}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%
+\section{Radios, Information \& the Comparator}
+%%%%%%%%%%
+\begin{frame}{Where is information encoded? \cite{Ruffini2025HAM}}
+  \begin{itemize}
+    \item Key idea: information is encoded in both neural \textbf{signals} and their amplitude \textbf{envelopes} (akin to amplitude modulation in radio).
+    \item \textbf{Analogy}: a low-frequency signal (message) modulates the amplitude of a high-frequency carrier wave (as in AM radio).
+    \item In the model, the sensory input message is carried in the \textbf{envelope} of a fast ($\gamma$) signals, and the prediction in the  slow ($\alpha$) one.
+    %\item This encoding scheme allows direct comparison: the brain can subtract the $\alpha$ prediction signal from the $\gamma$-envelope input signal to compute a prediction error.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%
+\begin{frame}{AM Radio  \cite{Ruffini2025HAM}} 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/presentation/mod_demod.png}
+\end{figure}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%
+% \begin{frame}{Hierarchical Amplitude Modulation  (HAM) \cite{Ruffini2025HAM}} 
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.7\linewidth]{figures//presentation/ham_signals.png}
+%     \label{fig:enter-label}
+% \end{figure}
+% \end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Comparator Mechanism (Concept)}
+  \centering 
+  \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{figures/presentation/comparator_example.png}
+      \caption{Conceptual diagram of the Comparator, illustrating how an input $I(t)$ (fast signal + envelope) and a prediction $P(t)$ (slow signal) combine to produce an error signal $E(t)$, with precision signals as envelopes controlling gain}
+      \label{fig:comparator}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods: SEC \& EEC}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Signal-Envelope Coupling (SEC)}
+  \begin{itemize}
+    \item \textbf{SEC:} A low-frequency oscillation modulates the amplitude envelope of a high-frequency oscillation (phase-amplitude coupling of slow and fast rhythms).
+    \item Example: an $\alpha$ wave’s phase influences the instantaneous power (envelope) of local $\gamma$ activity.
+    \item Functional role: SEC enables fast computation of prediction errors by directly injecting slow predictive signals into high-frequency neuronal activity (affecting $\gamma$ amplitude in real time).
+  \end{itemize}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{figures/presentation/comparator_sec.png}
+      \label{fig:comparator_sec}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Envelope-Envelope Coupling (EEC)}
+  \begin{itemize}
+    \item \textbf{EEC:} The amplitude envelope of a slow oscillation modulates the envelope of a faster oscillation (amplitude–amplitude coupling between frequency bands).
+    \item In other words, a slow modulatory signal (e.g. the envelope of an $\alpha$/$\beta$ rhythm) dynamically adjusts the amplitude envelope of $\gamma$ activity.
+    \item Functional role: EEC implements a \textbf{gating mechanism} for precision weighting. The slow envelope encodes precision (confidence), regulating the gain of fast error signals – high precision (strong slow envelope) amplifies error output, low precision attenuates it.
+  \end{itemize}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{figures/presentation/comparator_eec.png}
+      \label{fig:comparator_eec}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Couplings (P1 drive) (SEC an EEC)}
+  \begin{figure}
+      \centering
+      \includegraphics[width=0.98\linewidth]{figures/presentation/couplings_annotated.png}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+ 
+%%%%%%%%%%
+\begin{frame}{Comparator concept (main idea)}
+  \begin{figure}
+      \centering
+      \includegraphics[width=0.7\linewidth]{figures/Figure3.png}
+      \label{fig:lanmm}
+  \end{figure}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results: Error Suppression \& Modulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%
+\begin{frame}{Comparator Simulation (SEC Paradigm)}
+  \begin{itemize}
+    \item Tested the Comparator function by providing synthetic input and prediction signals to the model.
+    \item \textbf{Input:} 40 Hz $\gamma$ carrier oscillation with an $\alpha$-band (8--12 Hz) envelope (simulated sensory input signal).
+    \item \textbf{Prediction:} $\sim$10 Hz $\alpha$ oscillation. Three conditions for the prediction signal:
+      (i) \textit{Match:} envelope matches the input’s envelope;
+      (ii) \textit{Flat:} unmodulated flat signal (no envelope);
+      (iii) \textit{Wrong:} an independent (mismatched) $\alpha$ envelope.
+    \item The model’s output error signal is measured as the $\alpha$-band envelope of the P2 (gamma) population output.
+    \item \textbf{Hypothesis:} A matching prediction will cancel out the input’s envelope, producing a minimal error output, whereas flat or wrong predictions will result in a larger error signal.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Error Suppression with SEC via P1}
+  \begin{itemize}
+    \item With a matching prediction, the model’s error output was drastically suppressed.
+    \item The $\alpha$-power of the P2 output (error signal) was significantly lower in the \textit{match} condition: a correct top-down prediction effectively “explains away” the bottom-up input.
+  \end{itemize}
+  \centering 
+  \includegraphics[width=\linewidth]{figures/SEC_suppression.png}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%
+\begin{frame}{Error Suppression with SEC via PV}
+  \begin{itemize}
+    \item With a matching prediction, the model’s error output was drastically suppressed.
+    \item The $\alpha$-power of the P2 output (error signal) was significantly lower in the \textit{match} condition: a correct top-down prediction effectively “explains away” the bottom-up input.
+  \end{itemize}
+  \centering 
+  \includegraphics[width=\linewidth]{figures/SEC_suppression_PV.png}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+% \begin{frame}{SEC Results: Computation of Error (Subtraction)}
+%   \begin{itemize}
+%     \item The model’s error output closely approximated the difference between the input and prediction signals.
+%     \item A linear fit of the form $E \approx a\,I + b\,P$ yielded coefficients with opposite signs ($a \approx 1$, $b \approx -1$), consistent with $E \approx I - P$.
+%     \item The model’s error signal matched the true $I - P$ subtraction significantly better when $P$ was the correct prediction as opposed to a random (mismatched) signal. 
+%     \item This confirms that the circuit is effectively implementing a subtractive comparator: it computes a prediction error by subtracting the prediction from the input.
+%   \end{itemize}
+% \end{frame}
+% %%%%%%%%%%
+
+% %%%%%%%%%%
+% \begin{frame}{Error Subtraction Validation}
+%   \centering 
+%     \includegraphics[width=0.8\linewidth]{figures/SEC_subtraction.png}
+% \end{frame}
+% %%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Precision Modulation Simulation (EEC Paradigm)}
+  \begin{itemize}
+    \item Tested precision-weighting by introducing slow envelope modulations representing precision signals.
+    \item \textbf{Input precision:} encoded by slow fluctuations in the amplitude of the gamma input’s envelope (simulating changes in input reliability over time).
+    \item \textbf{Prediction precision:} encoded by a slow envelope applied to the prediction signal (simulating a prior expectation of precision).
+    \item We read out the slow envelope of the P2 output (gamma envelope-of-envelope) as the \textit{error precision} signal.
+    \item \textbf{Hypothesis:} The output’s slow envelope will approximate the difference between input precision and prediction precision. In other words, the model should subtract the predicted precision from the input precision, implementing proper gating.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Precision gating with EEC}
+\begin{itemize}
+    \item Introducing a precision-modulating signal to the prediction successfully attenuated the error envelope.
+    \item With a proper precision modulation (versus no modulation), the model’s error precision was significantly reduced, confirming that a top-down precision signal can gate (suppress) prediction errors.
+  \end{itemize}
+  \centering 
+  \includegraphics[width=\linewidth]{figures/presentation/EEC_suppression.png}
+  
+\end{frame}
+%%%%%%%%%%
+ 
+ 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Perturbations: Psychedelics \& AD}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%
+\begin{frame}{The Comparator on Psychedelics}
+  \begin{itemize}
+    \item Simulated a psychedelic state by increasing excitatory gain onto deep pyramidal cells (P1), mimicking 5-HT$_{2A}$ agonist effects (increased cortical excitability)\cite{gendraRestoringOscillatoryDynamics2024}.
+    \item Result: deep-layer $\alpha$ power was markedly reduced, and superficial $\gamma$ power was elevated (disinhibition of fast activity).
+    \item Even with a matching prediction, the error signal remained abnormally high – the model failed to attenuate prediction errors under this hyper-excitable condition.
+    \item Interpretation: Weakened top-down constraints (reduced precision of priors) lead to unfiltered bottom-up signals and excessive prediction errors. This aligns with the REBUS model of psychedelics (relaxed priors $\to$ an “anarchic” increase in error signals).
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Modeling the effect of Serotonergic Psychedelics\cite{gendraRestoringOscillatoryDynamics2024}}
+   \begin{figure}
+    \centering
+    \includegraphics[width=0.55\linewidth]{figures//presentation/psi.png}
+    \caption{Gendra et al., 2025, https://doi.org/10.1101/2025.03.19.644090}
+    \label{fig:enter-label}
+\end{figure} 
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Effect of Psychedelics}
+  \centering 
+  \includegraphics[width=\linewidth]{figures/Psychedelics.png}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Perturbation: PV Interneuron Dysfunction (AD Model)}
+  \begin{itemize}
+    \item Simulated Alzheimer’s-related inhibitory deficit by reducing the strength of PV interneuron ($\mathrm{PV}\to \mathrm{P2}$) synapses (disinhibition of P2)\cite{sanchez-todoFastInterneuronDysfunction2025}.
+    \item \textbf{Moderate PV loss (early stage):} gamma power increases and prediction error signals are amplified (hyper-excitable cortex with excessive surprise signals).
+    \item \textbf{Severe PV loss (late stage):} gamma oscillations collapse into slow-wave dominance (hypoactive cortex), and error signals are greatly attenuated or absent.
+    \item Interpretation: Early interneuron dysfunction causes exaggerated prediction errors (overestimating surprise), whereas advanced dysfunction leads to a breakdown of error signaling (failure to propagate errors).
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+
+%%%%%%%%%%
+\begin{frame}{Comparator under PV Dysfunction Perturbation (AD and others)}
+  \centering 
+    \includegraphics[width=\linewidth]{figures/AD.png}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Final Remarks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%
+% \begin{frame}{Interpretation: Cognitive Implications}
+%   \begin{itemize}
+%     \item These results suggest that cross-frequency coupling is critical for normal perception, attention, and learning. The SEC/EEC-based comparator allows the brain to selectively filter expected inputs and amplify surprising ones.
+%     \item Proper precision-weighted error gating (via EEC) provides a neural basis for selective attention and sensory attenuation – the brain tunes out predictable stimuli and highlights unexpected events.
+%     \item When the comparator is disrupted:
+%       - \textbf{Weak priors / low precision} (e.g. under psychedelics or early AD) $\to$ excessive unattenuated prediction errors, leading to sensory overload, hallucinations, or aberrant salience.
+%       - \textbf{Impaired error signaling} (e.g. late-stage AD or overly rigid high-level priors) $\to$ insufficient error feedback, leading to cognitive inflexibility, “surprise blindness,” and failure to update beliefs.
+%     \item Balanced oscillatory coupling thus appears essential for efficient predictive processing and cognitive function.
+%   \end{itemize}
+% \end{frame}
+%%%%%%%%%%
+
+ 
+
+% %%%%%%%%%%
+% \begin{frame}{Relation to Prior Work}
+%   \begin{itemize}
+%     \item \textbf{Hierarchical oscillations in PC:} Our findings align with empirical evidence that superficial cortical layers use fast $\gamma$ for feedforward errors, while deep layers use $\alpha/\beta$ for feedback predictions.
+%     \item \textbf{Novel mechanistic model:} Prior models and theories posited the role of cross-frequency coupling in predictive coding, but the LaNMM explicitly demonstrates a neural \textit{comparator} mechanism. It shows how phase-amplitude (SEC) and amplitude-amplitude (EEC) coupling can implement error computation and gain control in a biologically plausible circuit.
+%     \item \textbf{Consilience with data:} The model explains known neurophysiology – e.g. AD patients exhibit reduced theta/alpha–gamma PAC and impaired mismatch negativity.
+%     \item In sum, this work bridges abstract predictive coding theory with observed neural oscillation phenomena, supporting CFC as a key substrate for hierarchical inference in the brain.
+%   \end{itemize}
+% \end{frame}
+% %%%%%%%%%%
+
+% %%%%%%%%%%
+% \begin{frame}{Limitations}
+%   \begin{itemize}
+%     \item \textbf{Simplified model:} The LaNMM is an abstract, lumped neural-mass model. It captures key dynamics but omits detailed cellular/synaptic complexity and heterogeneity of real cortical circuits.
+%     \item \textbf{Experimental validation:} While simulations reproduce known oscillatory patterns (e.g. gamma changes in AD, psychedelic EEG effects), direct validation in vivo is needed. Future work should compare model predictions with electrophysiological data (EEG/MEG, laminar recordings).
+%     \item \textbf{Neuromodulatory detail:} We modeled neuromodulation (e.g. 5-HT$_{2A}$ agonist effect) by a single gain parameter change. Real neuromodulatory systems (cholinergic, serotonergic) involve complex receptor dynamics not explicitly represented here.
+%     \item \textbf{Scope:} Our analysis focused on a single cortical column (mesoscopic scale) with fixed alpha/gamma bands. We did not include large-scale network interactions or plasticity. Hierarchical (multi-region) implementations of predictive coding remain to be explored.
+%   \end{itemize}
+% \end{frame}
+% %%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%
+\begin{frame}{Summary I}
+  \begin{itemize}
+\item  We propose an encoding scheme where information is encoded in signals, their envelopes, and envelopes of envelopes.
+
+    \item We use the LaNMM for  a)  \textit{Signal-Envelope Coupling (SEC)}, where slow-wave activity modulates the amplitude envelope of fast oscillations, and b) 
+       \textit{Envelope-Envelope Coupling (EEC)}, 
+       where the envelopes of slower oscillations modulate the envelopes of higher-frequency rhythms.
+
+       
+        \item  We show how to use the LaNMM to implement information-based prediction-error evaluation (as used in Active Inference and Kolmogorov Theory), computing the approximate precision-weighted difference between incoming sensory data (envelopes) and internal model predictions (signals or envelopes).
+       
+
+        \item Using these mechanisms, the Comparator mechanism can operate at multiple levels and timescales,  generating fast prediction-error signals (via SEC) and slower gating signals that encode context (e.g., precision) (via EEC).
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}{Summary II}
+  \begin{itemize}
+
+    \item  In the early stages of AD,   error evaluation and precision are disrupted (inflated error and reduced gating/weight of predictions), leading to higher prediction errors. In later stages,  prediction errors are suppressed regardless of predictions or their precision. 
+
+\item Serotonergic psychedelics increase the effective weight of inputs and diminish that of predictions, resulting in higher prediction error signals. 
+
+\item These observations link oscillatory mechanisms and predictive coding alterations,  and potentially with the subjective phenomena in each condition---including cognitive decline in AD and hallucinatory states under psychedelics.
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%
+\begin{frame}{Future Directions}
+  \begin{itemize}
+    \item \textbf{Oscillatory computation:} Extend the model to multiple interconnected columns to simulate full hierarchical predictive coding (allowing inter-area prediction and error exchange).
+    \item \textbf Incorporate \textbf{more} \textbf{realistic} synaptic/connectivity models and receptor-level dynamics  to better capture state-dependent changes in precision weighting.
+    \item  Investigate \textbf{other} \textbf{conditions} with predictive coding abnormalities (e.g. schizophrenia, ASD, ADHD) by examining how their known oscillatory disruptions (e.g. gamma/beta irregularities) fit into this CFC comparator framework.
+    \item \textbf{Therapeutic avenues:} Use the model to test interventions (e.g. rhythmic brain stimulation, tACS) aimed at restoring normal cross-frequency coupling and improving predictive processing in disorders.
+    \item Link with Oscillatory Computation research \cite{todri-sanialComputingOscillatorsTheoretical2024}.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Closing}
+  \begin{itemize}
+    \item ``AM Radio" and CFC provide plausible paradigm for neural computation of prediction errors and their precision weighting.
+    \item Using a laminar cortical model, we showed that distinct modes of coupling – SEC and EEC – can instantiate a Comparator.
+    \item Perturbations of these coupling mechanisms recreated patterns seen in AD and psychedelic states, linking circuit dynamics to cognitive symptoms.
+    \item This work connects predictive coding theory to neurophysiology and neurophenomenology, highlighting how the brain’s oscillatory hierarchy might implement inference. %It underscores that disruptions in cross-frequency interactions can underlie profound cognitive deficits, while normalizing these interactions could be key to therapeutic strategies.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+
+%% =========
+%% Biblio
+%% =========
+
+\begin{frame}[allowframebreaks]{References}
+\bibliographystyle{unsrtnat} 
+\bibliography{varia/kolmogorov,references,references_zotero}  
+ 
+\end{frame}
+
+
+
+
+
+
+% End of slides
+\end{document}
+
