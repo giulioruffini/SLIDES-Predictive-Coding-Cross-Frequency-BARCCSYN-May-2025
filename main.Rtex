@@ -209,6 +209,12 @@ Jakub Vohryzek, Francesca Castaldo, and Karl Friston
 \end{frame}
 %%%%%%%%%%
 
+\begin{frame}{Model reproduces laminar spectrum and CFC}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.75\linewidth]{figures//presentation/bastos_stuff.png}
+    \end{figure}
+\end{frame}
 
 
 
@@ -423,7 +429,7 @@ Jakub Vohryzek, Francesca Castaldo, and Karl Friston
  
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Perturbations: Psychedelics \& AD}
+\section{Psychedelics \& AD}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -431,24 +437,27 @@ Jakub Vohryzek, Francesca Castaldo, and Karl Friston
 %%%%%%%%%%
 \begin{frame}{The Comparator on Psychedelics}
   \begin{itemize}
-    \item Simulated a psychedelic state by increasing excitatory gain onto deep pyramidal cells (P1), mimicking 5-HT$_{2A}$ agonist effects (increased cortical excitability)\cite{gendraRestoringOscillatoryDynamics2024}.
-    \item Result: deep-layer $\alpha$ power was markedly reduced, and superficial $\gamma$ power was elevated (disinhibition of fast activity).
-    \item Even with a matching prediction, the error signal remained abnormally high – the model failed to attenuate prediction errors under this hyper-excitable condition.
-    \item Interpretation: Weakened top-down constraints (reduced precision of priors) lead to unfiltered bottom-up signals and excessive prediction errors. This aligns with the REBUS model of psychedelics (relaxed priors $\to$ an “anarchic” increase in error signals).
+    \item Simulated a psychedelic state by \textbf{increasing excitatory gain onto deep pyramidal cells (P1)}, mimicking 5-HT$_{2A}$ agonist effects (increased cortical excitability, Gendra et al., 2025\cite{gendraRestoringOscillatoryDynamics2024}.
   \end{itemize}
-\end{frame}
-%%%%%%%%%%
-
-%%%%%%%%%%
-\begin{frame}{Modeling the effect of Serotonergic Psychedelics\cite{gendraRestoringOscillatoryDynamics2024}}
-   \begin{figure}
+     \begin{figure}
     \centering
-    \includegraphics[width=0.55\linewidth]{figures//presentation/psi.png}
-    \caption{Gendra et al., 2025, https://doi.org/10.1101/2025.03.19.644090}
-    \label{fig:enter-label}
+    \includegraphics[width=0.45\linewidth]{figures//presentation/psi.png}
+    %\caption{Gendra et al., 2025, https://doi.org/10.1101/2025.03.19.644090}
+   % \label{fig:enter-label}
 \end{figure} 
 \end{frame}
 %%%%%%%%%%
+
+% %%%%%%%%%%
+% \begin{frame}{Modeling the effect of Serotonergic Psychedelics\cite{gendraRestoringOscillatoryDynamics2024}}
+%    \begin{figure}
+%     \centering
+%     \includegraphics[width=0.55\linewidth]{figures//presentation/psi.png}
+%     %\caption{Gendra et al., 2025, https://doi.org/10.1101/2025.03.19.644090}
+%    % \label{fig:enter-label}
+% \end{figure} 
+% \end{frame}
+% %%%%%%%%%%
 
 %%%%%%%%%%
 \begin{frame}{Effect of Psychedelics}
@@ -458,21 +467,44 @@ Jakub Vohryzek, Francesca Castaldo, and Karl Friston
 %%%%%%%%%%
 
 %%%%%%%%%%
-\begin{frame}{Perturbation: PV Interneuron Dysfunction (AD Model)}
+\begin{frame}{The Comparator on Psychedelics}
   \begin{itemize}
-    \item Simulated Alzheimer’s-related inhibitory deficit by reducing the strength of PV interneuron ($\mathrm{PV}\to \mathrm{P2}$) synapses (disinhibition of P2)\cite{sanchez-todoFastInterneuronDysfunction2025}.
-    \item \textbf{Moderate PV loss (early stage):} gamma power increases and prediction error signals are amplified (hyper-excitable cortex with excessive surprise signals).
-    \item \textbf{Severe PV loss (late stage):} gamma oscillations collapse into slow-wave dominance (hypoactive cortex), and error signals are greatly attenuated or absent.
-    \item Interpretation: Early interneuron dysfunction causes exaggerated prediction errors (overestimating surprise), whereas advanced dysfunction leads to a breakdown of error signaling (failure to propagate errors).
+    \item \textbf{Result}: deep-layer $\alpha$ power was markedly reduced, and superficial $\gamma$ power was elevated (disinhibition of fast activity).
+    \item Even with a matching prediction, the error signal remained abnormally high – the model failed to attenuate prediction errors under this hyper-excitable condition.
+    \item \textbf{Interpretation}: Weakened top-down constraints (reduced precision of priors) lead to unfiltered bottom-up signals and excessive prediction errors. This aligns with the REBUS model of psychedelics: \textbf{relaxed priors $\to$ an “anarchic” increase in error signals}.
   \end{itemize}
 \end{frame}
 %%%%%%%%%%
 
 
 %%%%%%%%%%
+\begin{frame}{Perturbation: PV Interneuron Dysfunction (AD Model)}
+  \begin{itemize}
+    \item Simulated Alzheimer’s-related inhibitory deficit by reducing the strength of PV interneuron ($\mathrm{PV}\to \mathrm{P2}$) synapses (disinhibition of P2, Sanchez-Todo et al., 2025\cite{sanchez-todoFastInterneuronDysfunction2025}.
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.45\linewidth]{figures//presentation/AD.png}
+    \end{figure}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%
+
+
+
+%%%%%%%%%%
 \begin{frame}{Comparator under PV Dysfunction Perturbation (AD and others)}
   \centering 
     \includegraphics[width=\linewidth]{figures/AD.png}
+\end{frame}
+%%%%%%%%%%
+
+%%%%%%%%%%
+\begin{frame}{Perturbation: PV Interneuron Dysfunction (AD Model)}
+  \begin{itemize}
+    \item \textbf{Moderate PV loss (early stage):} gamma power increases and prediction error signals are amplified (hyper-excitable cortex with excessive surprise signals).
+    \item \textbf{Severe PV loss (late stage):} gamma oscillations collapse into slow-wave dominance (hypoactive cortex), and error signals are greatly attenuated or absent.
+    \item \textbf{Interpretation}: Early interneuron dysfunction causes exaggerated prediction errors (\textbf{overestimating surprise}), whereas advanced dysfunction leads to a breakdown of error signaling (\textbf{failure to propagate errors}).
+  \end{itemize}
 \end{frame}
 %%%%%%%%%%
 
@@ -584,7 +616,14 @@ Jakub Vohryzek, Francesca Castaldo, and Karl Friston
 \end{frame}
 %%%%%%%%%%
 
-
+\begin{frame}{}
+\begin{figure}
+        \centering
+        \includegraphics[width=0.4\linewidth]{figures//presentation/Screenshot 2025-05-22 at 6.26.58 PM.png}
+        \caption{https://github.com/giulioruffini/SLIDES-Predictive-Coding-Cross-Frequency-BARCCSYN-May-2025}
+    \end{figure}
+        
+\end{frame}
 %% =========
 %% Biblio
 %% =========
